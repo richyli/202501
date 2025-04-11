@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>MBTI 性格小遊戲</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    .question {
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4caf50;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #result {
+      background-color: #e0f7fa;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>你是哪一種 MBTI？</h1>
+
+  <div id="game"></div>
+  <div id="result"></div>
+
+  <script>
+    const questions = [
+      {
+        text: "你在聚會中喜歡？",
+        options: [
+          { text: "和大家一起嗨聊（E）", type: "E" },
+          { text: "找個角落安靜聊天（I）", type: "I" }
+        ]
+      },
+      {
+        text: "你比較重視？",
+        options: [
+          { text: "實際的細節（S）", type: "S" },
+          { text: "大方向和靈感（N）", type: "N" }
+        ]
+      },
+      {
+        text: "你做決定時更依賴？",
+        options: [
+          { text: "邏輯與分析（T）", type: "T" },
+          { text: "感受與價值觀（F）", type: "F" }
+        ]
+      },
+      {
+        text: "你偏好哪種生活方式？",
+        options: [
+          { text: "規劃、清單、目標（J）", type: "J" },
+          { text: "彈性、自由、隨機應變（P）", type: "P" }
+        ]
+      }
+    ];
+
+    let answers = [];
+    let currentQuestion = 0;
+
+    function renderQuestion() {
+      if (currentQuestion >= questions.length) {
+        showResult();
+        return;
+      }
+
+      const q = questions[currentQuestion];
+      const container = document.getElementById("game");
+      container.innerHTML = `
+        <div class="question">
+          <h2>第 ${currentQuestion + 1} 題</h2>
+          <p>${q.text}</p>
+          <button onclick="select('${q.options[0].type}')">${q.options[0].text}</button>
+          <button onclick="select('${q.options[1].type}')">${q.options[1].text}</button>
+        </div>
+      `;
+    }
+
+    function select(type) {
+      answers.push(type);
+      currentQuestion++;
+      renderQuestion();
+    }
+
+    function showResult() {
+      const counts = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+      answers.forEach(t => counts[t]++);
+      const result = 
+        (counts.E > counts.I ? "E" : "I") +
+        (counts.S > counts.N ? "S" : "N") +
+        (counts.T > counts.F ? "T" : "F") +
+        (counts.J > counts.P ? "J" : "P");
+
+      const resultText = `你的 MBTI 類型是：${result}`;
+      const desc = getMBTIDescription(result);
+
+      document.getElementById("game").innerHTML = "";
+      document.getElementById("result").innerHTML = `
+        <h2>${resultText}</h2>
+        <p>${desc}</p>
+      `;
+    }
+
+    function getMBTIDescription(type) {
+      const descriptions = {
+        "INTJ": "戰略家：理性、有遠見，擅長規劃與創新。",
+        "INFP": "調停者：理想主義、富有同理心，關心他人。",
+        "ESFP": "表演者：開朗、活潑，享受當下與人互動。",
+        "ISTJ": "檢察官：負責任、守紀律，重視細節。",
+        // 可繼續補完其他類型...
+      };
+      return descriptions[type] || "這是個獨一無二的你，探索中！";
+    }
+
+    renderQuestion();
+  </script>
+
+</body>
+</html>
