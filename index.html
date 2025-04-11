@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>我是演唱會公平小尖兵</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 40px;
+      max-width: 700px;
+      margin: auto;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px 15px;
+      width: 100%;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      border-radius: 5px;
+      text-align: left;
+    }
+    .options button:hover {
+      background-color: #e6f7ff;
+    }
+    .hidden {
+      display: none;
+    }
+    #result {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>我是演唱會公平小尖兵</h1>
+  <div id="game"></div>
+  <div id="result"></div>
+
+  <script>
+    const questions = [
+      {
+        text: '1. 為何周杰倫演唱會門票在短短5分鐘就售完？',
+        options: [
+          { text: '因為太便宜了', score: 0 },
+          { text: '因為黃牛使用搶票程式大量掃票', score: 1 },
+          { text: '因為粉絲太多都同時搶票', score: 0 },
+        ]
+      },
+      {
+        text: '2. 黃牛在台灣常見的販售管道為何？',
+        options: [
+          { text: '臉書社團與Instagram', score: 1 },
+          { text: '便利商店門口', score: 0 },
+          { text: '電影院門口', score: 0 },
+        ]
+      },
+      {
+        text: '3. 下列哪一項措施能有效降低黃牛數量？',
+        options: [
+          { text: '採用實名制與抽選制', score: 1 },
+          { text: '提早開賣', score: 0 },
+          { text: '加價販售', score: 0 },
+        ]
+      },
+      {
+        text: '4. 為什麼檢舉黃牛成功率低？',
+        options: [
+          { text: '民眾不會上網', score: 0 },
+          { text: '需提供詳細票券資訊且多數難以取得', score: 1 },
+          { text: '黃牛都躲起來', score: 0 },
+        ]
+      },
+      {
+        text: '5. 以下何者是理想票券制度應具備的？',
+        options: [
+          { text: '公開透明的交易與購票管道', score: 1 },
+          { text: '高價轉賣讓更多人參與', score: 0 },
+          { text: '限量銷售創造稀缺感', score: 0 },
+        ]
+      }
+    ];
+
+    let current = 0;
+    let totalScore = 0;
+
+    function showQuestion() {
+      if (current >= questions.length) {
+        showResult();
+        return;
+      }
+      const q = questions[current];
+      let html = `<div class="question"><h2>${q.text}</h2><div class="options">`;
+      q.options.forEach((opt, index) => {
+        html += `<button onclick="choose(${opt.score})">${opt.text}</button>`;
+      });
+      html += `</div></div>`;
+      document.getElementById('game').innerHTML = html;
+    }
+
+    function choose(score) {
+      totalScore += score;
+      current++;
+      showQuestion();
+    }
+
+    function showResult() {
+      document.getElementById('game').innerHTML = '';
+      let comment = '';
+      if (totalScore === 5) comment = '你是票務公平的超級鬥士！掌握所有知識，未來請幫忙檢舉黃牛！';
+      else if (totalScore >= 3) comment = '你已經有基本概念，還可以再了解更多票務市場的結構喔。';
+      else comment = '黃牛票不是唯一的選擇，建議多了解制度改善與公平交易方式。';
+
+      document.getElementById('result').innerHTML = `你的分數是 ${totalScore}/5<br>${comment}`;
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
